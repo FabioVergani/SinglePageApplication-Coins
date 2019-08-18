@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="google" content="notranslate">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimal-ui">
+		<title>Loading&hellip;</title>
+		<link rel="stylesheet" href="./page.css">
+		<script src="./lib.js"></script>
+		<script src="./page.js"></script>
+	</head>
+	<body>
+		<header>
+			<!-- id="body_header"-->
+		</header>
+		<main>
+			<h1 id="h1">Home</h1>
+			<article id="article">
+				<section id="home" class="current">
+					<ul>
+						<li><a href="#select-coin">Selezione</a></li>
+						<li><a href="#detail">Dettaglio</a></li>
+					</ul>
+				</section>
+				<section id="select-coin">
+					<h2>Selezione</h2>
+					<label>
+						Coins:
+						<div class="input-group">
+							<input type="text" list="coin_list" id="coin_field" placeholder="..." spellcheck="false" autocorrect="off" autocapitalize="off">
+							<datalist id="coin_list">
+								<option>a</option>
+								<option>aa</option>
+								<option>b</option>
+								<option>bb</option>
+							</datalist>
+							<button type="button" id="coin_add" title="Aggiungi la moneta">&#x2795;&nbsp;Add</button>
+						</div>
+					</label>
+					<ul id="coins_choosed"/>
+				</section>
+				<section id="detail">
+					<h2>Dettaglio</h2>
+				</section>
+				<section id="bad"/>
+			</article>
+		</main>
+		<footer>
+			<!-- id="body_footer"-->
+		</footer>
+	</body>
+</html>

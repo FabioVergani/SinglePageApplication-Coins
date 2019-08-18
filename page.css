@@ -1,0 +1,103 @@
+@keyframes fadein{
+	from{opacity:0}
+	to{opacity:1}
+}
+
+:root{
+	--color:#495057;
+	--border-color:#7b9fc2;
+	--outline-color:#49a4ff;
+	--input-radius:.25rem;
+	--input-color:var(--color);
+	--input-border-color:var(--border-color);
+	--input-background-color:#fff;
+	--button-color:var(--color);
+	--button-border-color:var(--border-color);
+	--button-background-color:#d2e5f7;
+	--button-border-color-hover:#85a1be;
+	--button-background-color-hover:#d6e8fa;
+}
+
+html{font-family:sans-serif;text-align:center;background:#fbfbfb;color:#000}
+input,body{text-align:left;text-align-last:left}
+body{display:inline-block;min-width:320px}
+body.refreshing{pointer-events:none;animation:fadein ease-out .5s forwards}
+ul,h2{font-size:1.5em;margin:0 0 .5em 0}
+h2+label{margin:0 0 1em 0;display:inline-block}
+li:not(:last-child){margin:0 0 .2em 0}
+
+
+button{
+	padding:.36rem .6rem .36rem .5rem;
+	background:var(--button-background-color);
+	border:1px solid var(--button-border-color);
+	user-select:none; 
+	cursor:pointer
+}
+
+button:hover{
+	background:var(--button-background-color-hover);
+	border-color:var(--button-border-color-hover);
+}
+
+.input-group button,
+button:disabled{
+	cursor:none;
+	pointer-events:none;
+	filter:grayscale(50%) saturate(50%) brightness(110%) contrast(85%);
+}
+
+button:focus,
+button{outline:0 solid transparent}
+
+
+.input-group{
+	font:400 1rem/1.5 sans-serif;
+	position:relative;
+	display:flex;
+	flex-wrap:wrap;
+	align-items:stretch;
+	width:100%;
+}
+
+.input-group input[type="text"]{
+	display:inline-block;
+	flex:1 1 auto;
+	margin:0;
+	padding:.36rem .5rem .36rem .75rem;
+	font-size:inherit;
+	line-height:1.5em;
+	color:var(--input-color);
+	vertical-align:middle;
+	background:var(--input-background-color);
+	border:1px solid var(--input-border-color);
+	border-radius:0;
+	border-top-left-radius:var(--input-radius);
+	border-bottom-left-radius:var(--input-radius);
+}
+
+.input-group button{
+	display:flex;
+	margin-left:-1px;
+	border-radius:0;
+	border-top-right-radius:var(--input-radius);
+	border-bottom-right-radius:var(--input-radius);
+}
+
+.input-group input:focus{outline:1px solid var(--outline-color)}
+.input-group input:focus::placeholder{color:var(--input-background-color)}
+
+.input-group input[list].usable:not(:placeholder-shown)+datalist+button{
+	cursor:pointer;
+	filter:none;
+	pointer-events:auto;
+}
+
+
+
+#h1.go-home{font-size:1em;text-decoration:underline;cursor:pointer}
+
+#article > section:not(.current){display:none}
+#article > section.current > h2:before{display:inline-block;content:'\2514\25Ba'}
+
+#coins_choosed:empty{display:none}
