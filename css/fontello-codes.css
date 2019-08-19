@@ -1,0 +1,4 @@
+@charset "UTF-8";
+
+ 
+.icon-search:before { content: '🔍'; } /* '\1f50d' */
