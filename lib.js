@@ -25,20 +25,21 @@
 		o[p](args)
 	};
 	onceAt(w,'load',()=>{
-		let haveData=false,isRefreshing=false;
+		let haveDataToSave=false,isRefreshing=false;
 		const d=w.document,
 		$body=d.body,
 		$h1=d.getElementById('h1'),
 		AppName=d.title='CoinsApp';
 		$article=d.getElementById('article'),
-		$coinField=$article.querySelector('#coin_field'),
-		$coinList=$article.querySelector('#coin_list'),
-		$coinAdd=$article.querySelector('#coin_add'),
-		$coinsChoosed=$article.querySelector('#coins_choosed'),
 		$bad=$article.querySelector('#bad'),
-		$badh2=$bad.appendChild(d.createElement('h2')),
+		$bad_H2=$bad.appendChild(d.createElement('h2')),	
+		$coin_INPUT=$article.querySelector('#coin-input'),
+		$coin_BUTTON=$article.querySelector('#coin-button'),
+		$coins_DL=$article.querySelector('#coins-datalist'),
+		$coins_UL=$article.querySelector('#coins-ul'),
+		coinChoosedOptions=[],
 		errorMsg={
-			0:($badh2.innerText='Sorry, there was an error.'),
+			0:($bad_H2.innerText='Sorry, there was an error.'),
 			404:'Not found.',
 			500:'Internal error.'
 		},
@@ -47,6 +48,12 @@
 		},
 		removeAttrs=(e,a)=>{
 			a.forEach(s=>{e.removeAttribute(s)})
+		},
+		removeClassAndRemoveEmptyAttribute=(e,s)=>{
+			e.classList.remove(s);
+			if(''===e.className){
+				e.removeAttribute('class')
+			}
 		},
 		goHome=()=>{
 			w.location.hash='home'
@@ -75,10 +82,7 @@
 			if('fadein'===event.animationName){
 				const e=event.target;
 				e.removeEventListener('animationend',handleAnimatioFadeInEnd);
-				e.classList.remove('refreshing');
-				if(''===e.className){
-					e.removeAttribute('class')
-				};
+				removeClassAndRemoveEmptyAttribute(e,'refreshing');
 				isRefreshing=false
 			}
 		};
@@ -98,63 +102,74 @@
 		routes['bad']=args=>{
 			removeSectionCurrentClass();
 			const o=errorMsg,p=args.error.code;
-			$badh2.innerHTML=o[p in o?p:0];
 			$bad.className='current\u0020error-'+p;
+			$bad_H2.innerHTML=o[p in o?p:0]
 		};
 
 
-		onceAt($coinField,'change',()=>{
-			haveData=true
+		onceAt($coin_INPUT,'change',()=>{
+			haveDataToSave=true
 		});
 
-		$coinField.addEventListener('change',event=>{
+		$coin_INPUT.addEventListener('change',event=>{
 			console.log('change',event);
-			const list=$coinList,field=$coinField,v=field.value;
-			field.datasource=null;
-			field.blur();
+			const list=$coins_DL,e=$coin_INPUT,v=e.value;
+			e.datasource=null;
+			e.blur();
 			for(const option of list.getElementsByTagName('option')){
 				if(true!==option.disabled && v===option.textContent){
 					list.querySelectorAll('option.selected').forEach(e=>{
-						e.classList.remove('selected');
-						if(''===e.className){
-							e.removeAttribute('class')
-						}
+						removeClassAndRemoveEmptyAttribute(e,'selected')
 					});
 					option.classList.add('selected');
-					field.datasource=option;
-					field.classList.add('usable');
-					onceAt(field,'input',()=>{
-						field.classList.remove('usable');
+					e.datasource=option;
+					const o=e.classList;
+					o.add('usable');
+					onceAt(e,'input',()=>{
+						o.remove('usable');
 					});
 					break
 				}
 			};
 		});
 
+/**/
+		$coin_INPUT.addEventListener('keyup',debounced(event=>{
+			const e=$coin_INPUT,o=e.classList,v=e.value,s='fetching-data';
+			e.blur();
+			e.click();
+			o.add(s);
+			setTimeout(()=>{
+				o.remove(s);
+				if($coins_DL.querySelectorAll('option[value="'+v+'"]').length){
 
-		$coinField.addEventListener('keyup',debounced(event=>{
-			const field=$coinField,v=field.value;
-			
+					o.add('usable');
+				}
+			},Math.floor(Math.random()*4E3));
 		}));
 
 
-		$coinAdd.addEventListener('click',event=>{
-			const field=$coinField,v=field.value,option=field.datasource;
-			field.datasource=null;
+
+		$coin_BUTTON.addEventListener('click',event=>{
+			let e=$coin_INPUT;
+			const v=e.value;
+			e.datasource=null;
 			field.value='';
-			if(option){
-				option.disabled=true;
+			if(e=e.datasource){
+				e.disabled=true;
+				coinChoosedOptions.push(e);
 				const li=d.createElement('li');
-				li.datasource=option;
+				li.datasource=e;
 				li.appendChild(d.createTextNode(v));
-				$coinsChoosed.appendChild(li)
+				$coins_UL.appendChild(li);
+				removeClassAndRemoveEmptyAttribute(e,'selected')
 			}
 		});
 
 
 		w.addEventListener('beforeunload',event=>{
 			let s=null;
-			if(haveData){
+			if(haveDataToSave){
 				s=event.returnValue=true;//'Are you sure you want to leave?';
 			};
 			return s
@@ -164,7 +179,7 @@
 			console.info('PopState:%O',event.state)
 		});
 
-		w.addEventListener('keydown',	event=>{
+		w.addEventListener('keydown',event=>{
 			if(116===event.keyCode){
 				let e=isRefreshing;
 				if(e||(e=event.target,!e)||(e=e.nodeName.toLowerCase(),'input'!==e && 'textarea'!==e)){
@@ -198,17 +213,17 @@
 
 
 
-			onceAt($coinField,'mouseout',()=>{
-				$coinField.blur()
+			onceAt($coin_INPUT,'mouseout',()=>{
+				$coin_INPUT.blur()
 			});
 
 
-		$coinList.addEventListener('input',event=>{
+		$coins_DL.addEventListener('input',event=>{
 			console.warn(event)
 		});
 
 
-$coinListSelect=$coinList.getElementsByTagName('select')[0],
+$coins_DLSelect=$coins_DL.getElementsByTagName('select')[0],
 
 :selected
 

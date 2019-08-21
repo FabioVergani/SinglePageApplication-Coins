@@ -18,26 +18,24 @@
 			<article id="article">
 				<section id="home" class="current">
 					<ul>
-						<li><a href="#select-coin">Selezione</a></li>
-						<li><a href="#detail">Dettaglio</a></li>
+						<li><b>A</b>)&thinsp;<a href="#select-coin">Selezione</a></li>
+						<li><b>B</b>)&thinsp;<a href="#detail">Dettaglio</a></li>
 					</ul>
 				</section>
 				<section id="select-coin">
 					<h2>Selezione</h2>
-					<label>
-						Coins:
-						<div class="input-group">
-							<input type="text" list="coin_list" id="coin_field" placeholder="..." spellcheck="false" autocorrect="off" autocapitalize="off">
-							<datalist id="coin_list">
-								<option>a</option>
-								<option>aa</option>
-								<option>b</option>
-								<option>bb</option>
-							</datalist>
-							<button type="button" id="coin_add" title="Aggiungi la moneta">&#x2795;&nbsp;Add</button>
-						</div>
-					</label>
-					<ul id="coins_choosed"/>
+					<div class="input-group">
+						<label for="coin-input"><b class='big'>NOME</b> moneta</label>
+						<input type="text" list="coins-datalist" id="coin-input" placeholder="Cerca..." spellcheck="false" autocorrect="off" autocapitalize="off">
+						<datalist id="coins-datalist">
+							<option value="a">a</option>
+							<option value="aa">aa</option>
+							<option value="b">b</option>
+							<option value="bb">bb</option>
+						</datalist>
+						<button id="coin-button" title="Aggiungi lamoneta"/>
+					</div>
+					<ul id="coins-ul"/>
 				</section>
 				<section id="detail">
 					<h2>Dettaglio</h2>
