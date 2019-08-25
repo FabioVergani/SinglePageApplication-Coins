@@ -107,6 +107,44 @@
 		};
 
 
+
+
+		const addListOptionIfNotExist=item=>{
+			console.dir(item);
+			const v=item.id;
+			if($coins_DL.querySelector('option[value="'+v+'"]')){
+				
+			}else{
+				const e=d.createElement('option');
+				e.innerHTML=e.value=v;
+				$coins_DL.appendChild(e);
+			}
+		};
+
+		const XHR=new w.XMLHttpRequest();
+
+		XHR.addEventListener('readystatechange',event=>{
+			const XHR=event.target;
+			if(XHR.readyState===4 && XHR.status===200){
+				let response;
+				try{
+					response=JSON.parse(XHR.responseText); 
+					console.dir(response)
+				}catch(err){
+					response={ok:false}
+				}finally{
+					response.ok=response.data.length;
+					$coin_INPUT.classList.remove('fetching-data');
+				};
+				if(response.ok){
+					response.data.forEach(addListOptionIfNotExist);
+					//TODOFILTER
+					$coin_INPUT.classList.add('found','usable');
+				}
+			}
+		});
+
+
 		onceAt($coin_INPUT,'change',()=>{
 			haveDataToSave=true
 		});
@@ -114,6 +152,7 @@
 		$coin_INPUT.addEventListener('change',event=>{
 			console.log('change',event);
 			const list=$coins_DL,e=$coin_INPUT,v=e.value;
+			clearTimeout(e.timeOut);
 			e.datasource=null;
 			e.blur();
 			for(const option of list.getElementsByTagName('option')){
@@ -124,9 +163,9 @@
 					option.classList.add('selected');
 					e.datasource=option;
 					const o=e.classList;
-					o.add('usable');
+					o.add('in-list');
 					onceAt(e,'input',()=>{
-						o.remove('usable');
+						o.remove('in-list');
 					});
 					break
 				}
@@ -134,23 +173,58 @@
 		});
 
 /**/
+		let searchedCoinIsUsable=false;
 		$coin_INPUT.addEventListener('keyup',debounced(event=>{
-			const e=$coin_INPUT,o=e.classList,v=e.value,s='fetching-data';
+			const b=$coin_BUTTON,e=$coin_INPUT,o=e.classList,v=e.value;
+			//clearTimeout(e.timeOut);
+			searchedCoinIsUsable=false;
+			b.disabled=true;
+			b.title="";
 			e.blur();
 			e.click();
-			o.add(s);
-			setTimeout(()=>{
-				o.remove(s);
-				if($coins_DL.querySelectorAll('option[value="'+v+'"]').length){
-
-					o.add('usable');
-				}
-			},Math.floor(Math.random()*4E3));
+			o.remove('in-list','found','usable','fetching-data');
+			if(v.length){
+				//e.timeOut=setTimeout(()=>{},Math.floor(Math.random()*4E3));
+					const opzione=$coins_DL.querySelector('option[value="'+v+'"]');
+					if(opzione){
+						if(opzione.disabled){
+							searchedCoinIsUsable=false;
+						}else{
+							o.add('in-list','usable');
+							b.disabled=false;
+							b.title="Aggiungi lamoneta";
+							searchedCoinIsUsable=true;
+						};
+						//clearTimeout(e.timeOut);e.timeOut=null;
+					}else{
+						//cerca online v
+							o.add('fetching-data');
+							XHR.abort();
+							XHR.open('GET','https://api.coincap.io/v2/assets?search='+v);
+							XHR.send()
+					}
+				
+			}
 		}));
 
 
 
 		$coin_BUTTON.addEventListener('click',event=>{
+			let input=$coin_INPUT;
+			input.classList.remove('in-list','found','usable');
+			const v=input.value;
+			input.value='';
+			if(v.length){
+				if(searchedCoinIsUsable){
+					//<<<<<<<<<<<<<<<<<<<<<<<<<
+				}else{
+					const nuovaOpzione=d.createElement('option');
+					nuovaOpzione.value=v;
+					$coins_DL.appendChild(nuovaOpzione);
+				}
+			}
+
+			/*
 			let e=$coin_INPUT;
 			const v=e.value;
 			e.datasource=null;
@@ -164,6 +238,7 @@
 				$coins_UL.appendChild(li);
 				removeClassAndRemoveEmptyAttribute(e,'selected')
 			}
+			*/
 		});
 
 

@@ -25,15 +25,17 @@
 				<section id="select-coin">
 					<h2>Selezione</h2>
 					<div class="input-group">
-						<label for="coin-input"><b class='big'>NOME</b> moneta</label>
-						<input type="text" list="coins-datalist" id="coin-input" placeholder="Cerca..." spellcheck="false" autocorrect="off" autocapitalize="off">
+						<label for="coin-input">
+							<b class='big'>NOME</b> moneta
+						</label>
+						<input type="text" list="coins-datalist" id="coin-input" placeholder="Cerca..." spellcheck="false" autocorrect="off" autocapitalize="off" />
+						<button id="coin-button" disabled>&zwj;</button>
 						<datalist id="coins-datalist">
 							<option value="a">a</option>
 							<option value="aa">aa</option>
 							<option value="b">b</option>
 							<option value="bb">bb</option>
 						</datalist>
-						<button id="coin-button" title="Aggiungi lamoneta"/>
 					</div>
 					<ul id="coins-ul"/>
 				</section>
